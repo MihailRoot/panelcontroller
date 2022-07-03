@@ -1,0 +1,15 @@
+{
+  "dependencies": {
+    "docker": "^1.0.0",
+    "dockerode": "^3.3.2",
+    "ftp-srv": "^4.6.2",
+    "ftps": "^1.2.0",
+    "node-docker-api": "^1.1.22",
+    "request": "^2.88.2",
+    "ssh2-sftp-client": "^9.0.1",
+    "ws": "^8.8.0"
+  },
+  "devDependencies": {
+    "ftp-deploy": "^2.4.2"
+  }
+}
