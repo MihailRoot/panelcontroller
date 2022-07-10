@@ -4,11 +4,27 @@ const {Docker} = require('node-docker-api');
 
 //const docker = new Docker({ socketPath: 'C:\Program Files\Docker\Docker\resources\bin\dockerd' });
 const docker = new Docker({ socketPath: '/var/run/docker.sock' });
-
+const { Worker } = require("worker_threads")
 'use strict';
-const request = require('request');
+const request = require('request-promise');
 const https = require('https')
 var FTPS = require('ftps');
+const options = {
+    method: 'GET',
+    uri: 'http://localhost:5240/api/Serversapi/1',
+    json:true
+}
+const faa =  request(options)
+    .then(function (response) {
+        const worker = new Worker("./worker.js", {
+            workerData: response
+        });
+
+    })
+    .catch(function (err) {
+        // Произошло что-то плохое, обработка ошибки
+    })
+
 /*request.post(
     'localhost:7240/Nodes/Details/1',
 
@@ -107,18 +123,14 @@ const ftpServer = new FtpSrv({
     anonymous: true
 });
 
-setInterval(fa,1)
-function fa() {
+ftpServer.on('login', ({ connection, username, password }, resolve, reject) => {
+    if (username === 'ihail' && password === 'Xserewer') {
+        return resolve({ root: "/home/" });
+    }
+    return reject(new errors.GeneralError('Invalid username or password', 401));
+});
 
-    return ftpServer.on('login', ({ connection, username, password }, resolve, reject) => {
-        if (username === 'ihail' && password === 'Xserewer') {
-            return resolve({ root: "/home/" });
-        }
-        return reject(new errors.GeneralError('Invalid username or password', 401));
-    });
-    
-
-}
 ftpServer.listen().then(() => {
     console.log('Ftp server is starting...')
 })
+ftpServer.on('closed', ({ }) => { });
