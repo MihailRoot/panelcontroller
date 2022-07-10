@@ -1,6 +1,6 @@
 ﻿var WebSocket = new require('ws');
 const {Docker} = require('node-docker-api');
-
+const path = require("path")
 
 //const docker = new Docker({ socketPath: 'C:\Program Files\Docker\Docker\resources\bin\dockerd' });
 const docker = new Docker({ socketPath: '/var/run/docker.sock' });
@@ -114,23 +114,3 @@ websocket.on('connection', (websocket) => {
     });
     websocket.send("Open");
 });
-
-const FtpSrv = require('ftp-srv');
-
-const port = 21;
-const ftpServer = new FtpSrv({
-    url: "ftp://0.0.0.0:" + port,
-    anonymous: true
-});
-
-ftpServer.on('login', ({ connection, username, password }, resolve, reject) => {
-    if (username === 'ihail' && password === 'Xserewer') {
-        return resolve({ root: "/home/" });
-    }
-    return reject(new errors.GeneralError('Invalid username or password', 401));
-});
-
-ftpServer.listen().then(() => {
-    console.log('Ftp server is starting...')
-})
-ftpServer.on('closed', ({ }) => { });
