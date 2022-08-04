@@ -20,7 +20,7 @@ websocket.on('connection', (websocket) => {
         // })
         var auxContainer;
         var secContainer;
-        app.get('http://localhost:5240/api/Serversapi/1',(req,res)=>{
+        app.get(`http://localhost:5240/Servers/Details/${data["id"]}`,(req,res)=>{
             console.log(req)
         })
         docker.createContainer({
