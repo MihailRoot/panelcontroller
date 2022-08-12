@@ -3,7 +3,7 @@ from pyftpdlib.authorizers import DummyAuthorizer
 from pyftpdlib.handlers import FTPHandler
 from pyftpdlib.servers import FTPServer
 import requests
-from threading 
+import threading 
 
 class Ftp(threading.Thread):
     def __init__(self,req):
@@ -15,7 +15,7 @@ class Ftp(threading.Thread):
         auth.add_user(f'{self.req["email"]}',f'{self.req["name"]}',"/",perm='')
         handler  = FTPHandler
         handler.authorizer = auth
-
+        
         server = FTPServer(("0.0.0.0",21),handler)
         server.serve_forever()
         
