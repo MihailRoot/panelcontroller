@@ -1,7 +1,21 @@
-const { ftpd } = require('jsftpd')
 const { workerData} = require("worker_threads")
 var datas = workerData
 
-const server = new ftpd({cnf: {username: `${datas["email"]}`, password: `${datas["Name"]}`, basefolder: '/tmp'}})
+const FtpSrv = require('ftp-srv');
 
-server.start()
+const port=21;
+const ftpServer = new FtpSrv({
+    url: "ftp://0.0.0.0:" + port,
+    anonymous: false
+});
+
+ftpServer.on("login", ({ connection, username, password }, resolve, reject) => { 
+    if(username === `${datas["email"]}` && password === `${datas["Name"]}`){
+        return resolve({ root:"/" });    
+    }
+    return reject(new errors.GeneralError('Invalid username or password', 401));
+});
+
+ftpServer.listen().then(() => { 
+    console.log('Ftp server is starting...')
+});
