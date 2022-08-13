@@ -1,7 +1,7 @@
 const { workerData} = require("worker_threads")
 var datas = workerData
-
 const FtpSrv = require('ftp-srv');
+const path = require('path');
 
 const port=21;
 const ftpServer = new FtpSrv({
@@ -11,7 +11,7 @@ const ftpServer = new FtpSrv({
 
 ftpServer.on("login", ({ connection, username, password }, resolve, reject) => { 
     if(username === `${datas["email"]}` && password === `${datas["Name"]}`){
-        return resolve({ root:"/" });    
+            return path.resolve({ root:"/" });    
     }
     return reject(new errors.GeneralError('Invalid username or password', 401));
 });

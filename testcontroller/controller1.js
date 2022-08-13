@@ -15,6 +15,8 @@ websocket.on('connection', (websocket) => {
         var data = JSON.parse(data)
         console.log(data)
         console.log(data["Id"])
+
+        
         const options = {
             method: 'GET',
             uri: `http://20.82.177.87:5062/Servers/Detailsapi/${data["Id"]}`,
@@ -32,6 +34,7 @@ websocket.on('connection', (websocket) => {
         var auxContainer;
         var secContainer;
 
+        function createserver(){
 
           docker.createContainer({
             Image: `${response["image"]}`,
@@ -49,18 +52,38 @@ websocket.on('connection', (websocket) => {
             container.start()
              container.inspect(function(err,data){
                   var gethostname = data[["Config"]];
+                 // websocket.send(gethostname["Hostname"])
                   const containerexec = new Worker("./containerexec.js",{
                            workerData: gethostname,
                        })
-                
+                       const options1 = {
+                        method:"PUT",
+                        uri:`http://20.82.177.87:5062/Servers/Detailsapi/${data["Id"]}`,
+                        body:{
+                            "id":data["Id"],
+                            "name":data["name"],
+                            "ContainerId":gethostname["Hostname"],
+                            "ip":data["ip"],
+                            "email":data["email"]
+                        },
+                        json:true
+                    }
+                    request(options1)
+                        .then(function (response) {
+                           console.log(response)
+                        })
+                        .catch(function (err) {
+                            console.log(err)
+                        })
               })
               container.attach({stream: true, stdout: true, stderr: true}, function (err, stream) {
                 stream.pipe(process.stdout)
                 stream.on("data", info => console.log(websocket.send(info)))  
-            })
+            
+              })
           })
-
- 
+      
+        }
           });
     }) 
     })
