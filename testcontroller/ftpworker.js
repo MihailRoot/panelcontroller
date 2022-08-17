@@ -10,8 +10,8 @@ const ftpServer = new FtpSrv({
 });
 
 ftpServer.on("login", ({ connection, username, password }, resolve, reject) => { 
-    if(username === `${datas["email"]}` && password === `${datas["Name"]}`){
-            return path.resolve({ root:"/" });    
+    if(username === `${datas["email"]}` && password === `${datas["name"]}`){
+            return resolve({ root:"/home/" });    
     }
     return reject(new errors.GeneralError('Invalid username or password', 401));
 });
