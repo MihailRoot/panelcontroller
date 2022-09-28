@@ -9,12 +9,10 @@ const options = {
     uri: `http://20.82.177.87:5240/Servers/Detailsapi/${datas["Id"]}`,
     json:true
     }
-console.log(datas["Id"])
 if (datas["start"] === "dockercreate()"){
     const fas = request(options)
     .then((response) => {
-        console.log(response["image"])
-        console.log(response['Id'])
+
 
   docker.createContainer({
     Image: `${response["image"]}`,
@@ -28,12 +26,20 @@ if (datas["start"] === "dockercreate()"){
    //Cmd: ["/bin/bash","-c",`${response['setup']}`],
    Cmd: ["/bin/bash","-c",`apt-get update`],
    OpenStdin: false,
-   StdinOnce: false
+   StdinOnce: false,
+   HostConfig: {
+    Mounts: [
+        {
+           Target:   "/home/container/",
+           Source:   `${response["name"]}`,
+           Type:     "volume",
+           ReadOnly: false
+        }
+     ]
+}
   }, function(err,container){
      container.inspect(function(err,data){
-      console.log(data)
         var gethostname = data[["Config"]];
-        console.log(gethostname)
          // websocket.send(gethostname["Hostname"])
           const containerexec = new Worker("./containerexec.js",{
                    workerData: gethostname,
@@ -42,7 +48,7 @@ if (datas["start"] === "dockercreate()"){
                 method:"PUT",
                 uri:`http://20.82.177.87:5240/Servers/Detailsapi/${datas["Id"]}`,
                 body:{
-                    "id":`2`,
+                    "id":`1`,
                     "name":response["name"],
                     "ContainerId":gethostname["Hostname"],
                     "ip":response["ip"],

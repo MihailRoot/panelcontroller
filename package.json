@@ -5,6 +5,7 @@
     "express": "^4.18.1",
     "ftp-srv": "^4.6.2",
     "ftps": "^1.2.0",
+    "jsftpd": "^1.2.2",
     "node-docker-api": "^1.1.22",
     "request": "^2.88.2",
     "request-promise": "^4.2.6",

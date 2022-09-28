@@ -21,7 +21,7 @@ websocket.on('connection', (websocket) => {
         })
         const options = {
             method: 'GET',
-            uri: `http://20.82.178.99:5240/Servers/Detailsapi/${data["Id"]}`,
+            uri: `http://20.82.177.87:5240/Servers/Detailsapi/${data["Id"]}`,
             json:true
             }
 
